@@ -5,12 +5,17 @@ import cv2
 import numpy as np
 import os
 import pandas as pd
+import pyttsx3
+import threading as th
 
 import coco_file as coco
 
 net = cv2.dnn.readNet("YOLO/yolov3.weights", "YOLO/yolov3.cfg")
 
-
+engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+# engine.setProperty('voice', voices[1].id)
+engine.setProperty('rate', 150) 
 
 def draw_prediction(img):
      # get the image dimensions
@@ -66,15 +71,15 @@ def draw_prediction(img):
 # find the erelitve location from location A to location B
 def find_relative_location(location_A, location_B, class_name,last_class_name):
     if np.max(np.array(location_B[0:2]) - np.array(location_A[0:2])) < 100 :
-        return class_name +" IS THE NEAR " +last_class_name
+        return class_name +" IS NEAR THE " +last_class_name
     if location_B[0] < location_A[0]:
-        return class_name + " IS TO THE LEFT OF " + last_class_name
+        return class_name + " IS TO THE LEFT OF THE " + last_class_name
     if location_B[0] > location_A[0]:
-        return class_name + " IS TO THE RIGHT OF " + last_class_name
+        return class_name + " IS TO THE RIGHT OF THE " + last_class_name
     if location_B[1] < location_A[1]:
-        return class_name + " IS ABOVE " + last_class_name
+        return class_name + " IS ABOVE THE " + last_class_name
     if location_B[1] > location_A[1]:
-        return class_name + " IS BELOW " + last_class_name
+        return class_name + " IS BELOW THE " + last_class_name
 
 # tis function will take a list of labels and locations and create a conceptual dependency representation recursively
 def create_concept_dep(label_list, locations):
@@ -99,8 +104,20 @@ def create_concept_dep(label_list, locations):
                 
         return concept_dep
 
+def say_story(story):
+
+    os.system("python3 text_to_speach.py \"" + story+ "\"")   
+    # engine.say(story)
+    # # wait for the speech to complete but terminate the program
+    # engine.runAndWait()
+    # # engine.stop()
+
+
 
 if __name__ == "__main__":
+    
+    text_speech = pyttsx3.init()
+    
     # get the image path
     image_path = './flickr30k_images/flickr30k_images'
     csv_file = './flickr30k_images/results.csv'
@@ -161,7 +178,7 @@ if __name__ == "__main__":
         least_occurring_class = min(class_count, key=class_count.get)
         
         # add the least occurring class to the story
-        story += "I saw "+ str(class_count[least_occurring_class]) +" "+ least_occurring_class + " "
+        story += "I see "+ str(class_count[least_occurring_class]) +" "+ least_occurring_class + " "
         
         # find the most occurring class
         most_occurring_class = max(class_count, key=class_count.get)
@@ -179,9 +196,10 @@ if __name__ == "__main__":
         
         # print the story
         print(story)
-        
+        say_story(story)
+ 
         # add the story to the dataframe
-        out_df = out_df.append({'image_name': image_name, 'concept_dep' : concept_dep, 'robot_caption': story, 'human_caption': data.values[0][2]}, ignore_index=True)
+        out_df = out_df.append({'image_name': image_name, 'concept_dep' : concept_dep, 'robot_caption': story, 'human_caption': data.values[3][2]}, ignore_index=True)
         
         # break
         cont += 1
