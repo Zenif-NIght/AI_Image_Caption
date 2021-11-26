@@ -104,6 +104,26 @@ def create_concept_dep(label_list, locations):
                 
         return concept_dep
 
+# create a recessive function to say the story
+def make_recessive_story(label_list,class_count ,locations, story):
+    if len(label_list) == 0:
+        return story + "."
+    else:
+        cerObject = label_list[0]
+        cerLocatiion = locations[0]
+        pastObject = label_list[-1]
+        pastLoocation = locations[-1]
+        # if class_count["pr"]÷
+        if 'ACTOR' == coco.lexicon[cerObject] and 'OBJECT' == coco.lexicon[pastObject]:
+            story = story + " the " + find_relative_location(cerLocatiion,pastLoocation,cerObject,pastObject)
+        if 'OBJECT' == coco.lexicon[cerObject] and 'ACTOR' == coco.lexicon[pastObject]:
+            story = story + " the " + find_relative_location(cerLocatiion,pastLoocation,cerObject,pastObject)
+        if 'OBJECT' == coco.lexicon[cerObject] and 'OBJECT' == coco.lexicon[pastObject]:
+            story = story + " the " + find_relative_location(cerLocatiion,pastLoocation,cerObject,pastObject)
+            
+        return make_recessive_story(label_list[1:], locations[1:], story)
+
+
 def say_story(story):
 
     os.system("python3 text_to_speach.py \"" + story+ "\"")   
@@ -173,6 +193,17 @@ if __name__ == "__main__":
         
         # concept_dep = create_concept_dep(label_list, locations)
         concept_dep = {}
+        
+        # if only one class in the image
+        if len(class_count) == 1:
+
+            story += "I see one " + label_list[0] 
+            print(story)
+            say_story(story)
+            continue
+        
+        # story = make_recessive_story(label_list, class_count, locations, story)
+        # say_story(story)
         
         # find the least occurring class
         least_occurring_class = min(class_count, key=class_count.get)
