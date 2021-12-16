@@ -11,6 +11,12 @@ simply run the following command
 ```
 pip install -r requirements.txt
 ```
+if on ubuntu:
+```
+sudo apt install espeak
+```
+
+
 
 
 # AI_Image_Caption
