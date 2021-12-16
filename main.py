@@ -203,7 +203,8 @@ def say_story(story):
 if __name__ == "__main__":
      
     # get the image path
-    image_path = './flickr30k_images/flickr30k_images'
+    # image_path = './flickr30k_images/flickr30k_images'
+    image_path = './demo_images'
     csv_file = './flickr30k_images/results.csv'
     csv_out_file = './results_out.csv'
     # Search the csv file for the image name
@@ -224,11 +225,11 @@ if __name__ == "__main__":
             continue
         
         # get the image caption
-        print("__________STARTING-IMG \"", image_name ,"\"_________________")
+        print(cont,"__________STARTING-IMG \"", image_name ,"\"_________________")
         print("Human Image Captions ")
-        print(data.values[0][2])
-        print(data.values[1][2])
-        print(data.values[2][2])
+        # print(data.values[0][2])
+        # print(data.values[1][2])
+        # print(data.values[2][2])
         print(data.values[3][2])
 
         # get the next image
@@ -236,7 +237,8 @@ if __name__ == "__main__":
         
         [label_list, locations] = draw_prediction(img)
         
-        if len(label_list) == 0:
+        # if nothering is detected or only one thing is detected
+        if len(label_list) <= 1:
             continue
         
         # print a sentence for each image
@@ -263,15 +265,16 @@ if __name__ == "__main__":
         # print the story
         print(story)
         print(concept_dep)
-        # say_story(story)
+        say_story(story)
  
         # add the story to the dataframe
         out_df = out_df.append({'image_name': image_name, 'concept_dep' : concept_dep, 'robot_caption': story, 'human_caption': data.values[3][2]}, ignore_index=True)
         
         # break
         cont += 1
-        if cont == 10:
-            break
+        print("__________ENDING-IMG \"", image_name ,"\"_________________")
+        # if cont == 10:
+        #     break
     
     # create a new csv file with the story
     out_df.to_csv(csv_out_file, sep='|', index=False)
