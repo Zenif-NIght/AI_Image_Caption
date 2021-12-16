@@ -1,7 +1,5 @@
 # this program will open an image file from the flickr30k dataseet and run YOLO on the image 
 # and create a Conceptual dependency representation fo the image
-import argparse
-
 import cv2
 import numpy as np
 import os
@@ -11,7 +9,7 @@ import threading as th
 
 import coco_file as coco
 
-net = cv2.dnn.readNet("YOLO/yolov3.weights", "YOLO/yolov3.cfg")
+net = cv2.dnn.readNet("YOLO_Weights/yolov3.weights", "YOLO_Weights/yolov3.cfg")
 
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
