@@ -29,7 +29,9 @@ python3 main.py
 note I have a bug where the 1st image does not show up.also if you don't hear the speech turn on your speakers
 
 # Results
-The results are shown in the in the output csv file: results_out.csv. The first column is the image name and the second column is the conceptual dependency representation. the las 2 columns are the robot_caption and human_caption.
+The results are shown in the in the output csv file: results_out.csv. The first column is the image name and the second column is the conceptual dependency representation. the las 2 columns are the robot_caption and human_caption. 
+
+Also note the CSV is delimited by a '|'. 
 
 ### Example Outpu from the csv file:
 ```
