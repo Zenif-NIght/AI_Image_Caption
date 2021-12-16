@@ -74,13 +74,13 @@ def find_relative_location(location_A, location_B, class_name_A,last_class_name_
     delta = np.sqrt((location_A[0] - location_B[0])**2 + (location_A[1] - location_B[1])**2) 
     if delta < 100 :
         return " is near " 
-    if location_B[0] < location_A[0]:
+    if location_A[0] < location_B[0]:
         return  " is to the left of " 
-    if location_B[0] > location_A[0]:
+    if location_A[0] > location_B[0]:
         return  " is to the right of " 
-    if location_B[1] < location_A[1]:
+    if location_A[1] < location_B[1]:
         return  " is above " 
-    if location_B[1] > location_A[1]:
+    if location_A[1] > location_B[1]:
         return  " is below " 
 
 # tis function will take a list of labels and locations and create a conceptual dependency representation recursively
@@ -173,6 +173,8 @@ def make_recessive_story(label_list,class_count ,locations, story, concept_dep):
                     pluralize(class1,class_count, useThe=True) + 
                     find_relative_location(locations[label_list.index(class1)],locations[label_list.index(class2)],class1,class2) 
                     +  pluralize(class2,class_count, useThe=True) + ".")
+        
+        # 
         
         label_list,class_count ,locations = remove_classes(class1, label_list,class_count ,locations)
         label_list,class_count ,locations = remove_classes(class2, label_list,class_count ,locations)
