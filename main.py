@@ -70,16 +70,18 @@ def draw_prediction(img):
         
 # find the erelitve location from location A to location B
 def find_relative_location(location_A, location_B, class_name_A,last_class_name_B):
-    if np.max(np.array(location_B[0:2]) - np.array(location_A[0:2])) < 100 :
-        return class_name_A +" IS NEAR THE " +last_class_name_B
+    # tale the magnitude of the distance between the two locations
+    delta = np.sqrt((location_A[0] - location_B[0])**2 + (location_A[1] - location_B[1])**2) 
+    if delta < 100 :
+        return " is near " 
     if location_B[0] < location_A[0]:
-        return class_name_A + " IS TO THE LEFT OF THE " + last_class_name_B
+        return  " is to the left of " 
     if location_B[0] > location_A[0]:
-        return class_name_A + " IS TO THE RIGHT OF THE " + last_class_name_B
+        return  " is to the right of " 
     if location_B[1] < location_A[1]:
-        return class_name_A + " IS ABOVE THE " + last_class_name_B
+        return  " is above " 
     if location_B[1] > location_A[1]:
-        return class_name_A + " IS BELOW THE " + last_class_name_B
+        return  " is below " 
 
 # tis function will take a list of labels and locations and create a conceptual dependency representation recursively
 def create_concept_dep(label_list, locations):
@@ -123,21 +125,27 @@ def remove_classes(remove_class, label_list, class_count, locations):
     return new_label_list, class_count, new_locations
 
 # this function pluralizes the conceptual dependency representation
-def pluralize(class1,class_count):
+def pluralize(class1,class_count, useThe=False):
     count1 = class_count[class1]
     
     str_1 = " " + class1 
     # add an s is the last class is plural
     if count1 > 1:
-        str_1 = str(count1) + str_1 + "s"
+        if useThe:
+            str_1 = " the " +str(count1) +" "+  class1 + "s"
+        else:
+            str_1 = " " +str(count1) +" "+ class1 + "s"
     else: 
-        str_1 = 'a' + str_1
+        if useThe:
+            str_1 = "the" + str_1
+        else:
+            str_1 = 'a' + str_1
     return str_1
 
 # create a recessive function to say the story
-def make_recessive_story(label_list,class_count ,locations, story):
+def make_recessive_story(label_list,class_count ,locations, story, concept_dep):
     if len(class_count) == 0:
-        return story 
+        return story , concept_dep
     elif len(class_count) == 1:
         cur_class = list(class_count.keys())[0]
         if story != "":
@@ -146,7 +154,7 @@ def make_recessive_story(label_list,class_count ,locations, story):
             story += "I see "+ pluralize(cur_class,class_count) + "."
         label_list,class_count ,locations = remove_classes(cur_class, label_list,class_count ,locations)
         
-        return make_recessive_story(label_list, class_count, locations, story)
+        return make_recessive_story(label_list, class_count, locations, story, concept_dep)
     elif len(class_count) >= 2:
         # write a sentence about the last 2 classes
               
@@ -160,43 +168,19 @@ def make_recessive_story(label_list,class_count ,locations, story):
                    
         story = story + " I see "+ pluralize(class1,class_count)  + " and " + pluralize(class2,class_count)  + "."
         
-        
+        # state the relitive location of class1 and class2
+        story = (story + " I note that " +
+                    pluralize(class1,class_count, useThe=True) + 
+                    find_relative_location(locations[label_list.index(class1)],locations[label_list.index(class2)],class1,class2) 
+                    +  pluralize(class2,class_count, useThe=True) + ".")
         
         label_list,class_count ,locations = remove_classes(class1, label_list,class_count ,locations)
         label_list,class_count ,locations = remove_classes(class2, label_list,class_count ,locations)
-        return make_recessive_story(label_list, class_count, locations, story)
+        return make_recessive_story(label_list, class_count, locations, story, concept_dep)
     else:
         print('THERE IS AN ERROR')
-        return 'THERE IS AN ERROR'+ story + "ERROR POINT."
+        return 'THERE IS AN ERROR'+ story + "ERROR POINT.", concept_dep
 
-    
-        # cerObject = label_list[0]
-        # cerLocatiion = locations[0]
-        # pastObject = label_list[-1]
-        # pastLoocation = locations[-1]
-        
-
-        
-        # # if the most occurring class is 2 or more times talk about the group 
-        # if class_count[most_occurring_class] >= 2:
-        #     story += "there is a group of "+ str(class_count[most_occurring_class])+" " + most_occurring_class + "s,"
-
-        #     label_list,class_count ,locations = remove_classes(most_occurring_class, label_list,class_count ,locations)
-            
-        #     return make_recessive_story(label_list,class_count ,locations, story)
-        
-        
-        
-        # if class_count["pr"]÷
-        
-        # if 'ACTOR' == coco.lexicon[cerObject] and 'OBJECT' == coco.lexicon[pastObject]:
-        #     story = story + " the " + find_relative_location(cerLocatiion,pastLoocation,cerObject,pastObject)
-        # if 'OBJECT' == coco.lexicon[cerObject] and 'ACTOR' == coco.lexicon[pastObject]:
-        #     story = story + " the " + find_relative_location(cerLocatiion,pastLoocation,cerObject,pastObject)
-        # if 'OBJECT' == coco.lexicon[cerObject] and 'OBJECT' == coco.lexicon[pastObject]:
-        #     story = story + " the " + find_relative_location(cerLocatiion,pastLoocation,cerObject,pastObject)
-            
-        return make_recessive_story(label_list[1:], locations[1:], story)
 
 
 def say_story(story):
@@ -210,9 +194,7 @@ def say_story(story):
 
 
 if __name__ == "__main__":
-    
-    text_speech = pyttsx3.init()
-    
+     
     # get the image path
     image_path = './flickr30k_images/flickr30k_images'
     csv_file = './flickr30k_images/results.csv'
@@ -269,39 +251,7 @@ if __name__ == "__main__":
         # concept_dep = create_concept_dep(label_list, locations)
         concept_dep = {}
                
-        story = make_recessive_story(label_list, class_count, locations, story)
-
-        
-        
-        # # find the least occurring class
-        # least_occurring_class = min(class_count, key=class_count.get)
-        # # find the most occurring class
-        # most_occurring_class = max(class_count, key=class_count.get)
-        
-        # # if the most occurring class is 4 or more times talk about the group 
-        # if class_count[most_occurring_class] >= 4:
-        #     story += "there is a group of "+ str(class_count[most_occurring_class])+" " + most_occurring_class + "s"
-        #     continue 
-        
-        # # add the least occurring class to the story
-        # story += "I see "+ str(class_count[least_occurring_class]) +" "+ least_occurring_class + " "
-        
-        
-        # # add the most occurring class to the story
-        # # add am 's' if the class is plural
-        # if class_count[most_occurring_class] > 1:
-        #     story += "and " + str(class_count[most_occurring_class]) + " "+ most_occurring_class + "s."
-        # else:
-        #     story += "and " + most_occurring_class + "."
-            
-        
-        # # describe relation between the most and least occurring class
-        # story += " The " + find_relative_location(
-        #                 locations[label_list.index(most_occurring_class)], 
-        #                 locations[label_list.index(least_occurring_class)], 
-        #                 most_occurring_class, 
-        #                 least_occurring_class) + "."
-        
+        story, concept_dep= make_recessive_story(label_list, class_count, locations, story, concept_dep)
         
         # print the story
         print(story)
