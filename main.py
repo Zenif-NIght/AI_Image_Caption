@@ -1,5 +1,6 @@
 # this program will open an image file from the flickr30k dataseet and run YOLO on the image 
 # and create a Conceptual dependency representation fo the image
+import argparse
 
 import cv2
 import numpy as np
@@ -152,6 +153,7 @@ def make_recessive_story(label_list,class_count ,locations, story, concept_dep):
             story += " I also see " + pluralize(cur_class,class_count) + "."
         else:
             story += "I see "+ pluralize(cur_class,class_count) + "."
+        concept_dep[cur_class] = [coco.lexicon[cur_class], ""]
         label_list,class_count ,locations = remove_classes(cur_class, label_list,class_count ,locations)
         
         return make_recessive_story(label_list, class_count, locations, story, concept_dep)
@@ -174,7 +176,10 @@ def make_recessive_story(label_list,class_count ,locations, story, concept_dep):
                     find_relative_location(locations[label_list.index(class1)],locations[label_list.index(class2)],class1,class2) 
                     +  pluralize(class2,class_count, useThe=True) + ".")
         
-        # 
+        # construct the concept depencency representation
+        # append the relitive location of class1 and class2
+        concept_dep[class1] = [coco.lexicon[class1], find_relative_location(locations[label_list.index(class1)],locations[label_list.index(class2)],class1,class2)]
+        concept_dep[class2] = [coco.lexicon[class2], find_relative_location(locations[label_list.index(class1)],locations[label_list.index(class2)],class1,class2)]
         
         label_list,class_count ,locations = remove_classes(class1, label_list,class_count ,locations)
         label_list,class_count ,locations = remove_classes(class2, label_list,class_count ,locations)
@@ -257,7 +262,8 @@ if __name__ == "__main__":
         
         # print the story
         print(story)
-        say_story(story)
+        print(concept_dep)
+        # say_story(story)
  
         # add the story to the dataframe
         out_df = out_df.append({'image_name': image_name, 'concept_dep' : concept_dep, 'robot_caption': story, 'human_caption': data.values[3][2]}, ignore_index=True)
