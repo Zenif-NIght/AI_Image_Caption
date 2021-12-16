@@ -1,0 +1,6 @@
+# install cv2, numpy, pandas, pyttsx3, and threading
+
+numpy
+opencv-python
+pandas
+pyttsx3
