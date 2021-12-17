@@ -1,0 +1,23 @@
+image_name|concept_dep|robot_caption|human_caption
+2629302765.jpg|{'potted plant': ['OBJECT', ' is to the right of '], 'person': ['ACTOR', ' is to the right of '], 'sports ball': ['OBJECT', '']}| I see a potted plant and  2 persons. I note that the potted plant is to the right of  the 2 persons. I also see  2 sports balls.| A toddler with pink pants , pours water into a small plant .
+2420549526.jpg|{'person': ['ACTOR', ' is to the left of '], 'spoon': ['OBJECT', ' is to the left of ']}| I see a person and a spoon. I note that the person is to the left of the spoon.| A man sitting on the kitchen floor playing drums on pots .
+284644694.jpg|{'bicycle': ['OBJECT', ' is to the right of '], 'person': ['ACTOR', ' is to the right of ']}| I see a bicycle and  6 persons. I note that the bicycle is to the right of  the 6 persons.| A young dark-skinned girl is having her sneakers polished .
+211402278.jpg|{'sheep': ['ACTOR', ' is to the left of '], 'car': ['OBJECT', ' is to the left of '], 'person': ['ACTOR', '']}| I see  3 sheeps and  14 cars. I note that  the 3 sheeps is to the left of  the 14 cars. I also see  5 persons.| Two men are paddling a boat , by a lot of trees .
+2098418613.jpg|{'dog': ['ACTOR', ' is to the right of '], 'car': ['OBJECT', ' is to the right of '], 'toilet': ['OBJECT', ' is to the right of '], 'bench': ['LOCATION', ' is to the right of '], 'potted plant': ['OBJECT', '']}| I see a dog and a car. I note that the dog is to the right of the car. I see a toilet and a bench. I note that the toilet is to the right of the bench. I also see a potted plant.| A brown dogs walks near a green van and some junk .
+2330765551.jpg|{'person': ['ACTOR', ' is near '], 'bicycle': ['OBJECT', ' is near ']}| I see  2 persons and  2 bicycles. I note that  the 2 persons is near  the 2 bicycles.| Two cyclists traverse a green terrain .
+2403832405.jpg|{'person': ['ACTOR', ' is near '], 'bottle': ['OBJECT', ' is near ']}| I see a person and a bottle. I note that the person is near the bottle.| One guy wearing a black shirt playing Scrabble .
+2324749825.jpg|{'elephant': ['ACTOR', ' is to the right of '], 'person': ['ACTOR', ' is to the right of ']}| I see a elephant and  8 persons. I note that the elephant is to the right of  the 8 persons.| An elephant hold his trunk to a boy 's head while others watch .
+2331827016.jpg|{'person': ['ACTOR', ' is to the right of '], 'horse': ['ACTOR', ' is to the right of ']}| I see a person and a horse. I note that the person is to the right of the horse.| Rider riding horse as it jumps over a fence .
+2123995873.jpg|{'person': ['ACTOR', ' is near '], 'traffic light': ['LOCATION', ' is near '], 'sports ball': ['OBJECT', '']}| I see a person and  2 traffic lights. I note that the person is near  the 2 traffic lights. I also see a sports ball.| Construction worker leaning against under a crosswalk light .
+|||
+||28|13
+||19|12
+||20|10
+||26|13
+||44|12
+||18|7
+||16|9
+||20|14
+||19|10
+||25|9
+||23.5|10.9

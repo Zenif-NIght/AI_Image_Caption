@@ -67,7 +67,7 @@ def draw_prediction(img):
         
         return [label_list, locations]
         
-# find the erelitve location from location A to location B
+# find the relative location from location A to location B
 def find_relative_location(location_A, location_B, class_name_A,last_class_name_B):
     # tale the magnitude of the distance between the two locations
     delta = np.sqrt((location_A[0] - location_B[0])**2 + (location_A[1] - location_B[1])**2) 
@@ -266,7 +266,15 @@ if __name__ == "__main__":
         say_story(story)
  
         # add the story to the dataframe
-        out_df = out_df.append({'image_name': image_name, 'concept_dep' : concept_dep, 'robot_caption': story, 'human_caption': data.values[3][2]}, ignore_index=True)
+        out_df = out_df.append({'image_name': image_name, 
+                                'concept_dep' : concept_dep, 
+                                'robot_caption': story,
+                                'human_caption3': data.values[3][2],
+                                'human_caption2': data.values[2][2],
+                                'human_caption1': data.values[1][2],
+                                'human_caption0': data.values[0][2],
+                                },
+                               ignore_index=True)
         
         # break
         cont += 1
