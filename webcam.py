@@ -1,3 +1,5 @@
+# this program will speak captions from images from the webcam
+
 # this program will open an image file from the flickr30k dataseet and run YOLO on the image 
 # and create a Conceptual dependency representation fo the image
 import cv2
@@ -178,91 +180,65 @@ def say_story(story):
 
 if __name__ == "__main__":
      
-    # get the image path
-    # image_path = './flickr30k_images/flickr30k_images'
-    image_path = './demo_images'
-    csv_file = './clean_results.csv'
-    csv_out_file = './results_out.csv'
-    # Search the csv file for the image name
-    df = pd.read_csv(csv_file, delimiter='|')
-    # print(df)
-    
-    out_df = pd.DataFrame(columns=['image_name', 'concept_dep' ,'robot_caption', 'human_caption'])
-        
-    cont = 0
-    # loop over the image in the folder
-    for image_name in os.listdir(image_path):
-        
-        # find the dataframe row with the image name
-        data = df[df['image_name'] == image_name]
 
-        if data.empty:
-            os.remove(image_path +'/'+ image_name)
-            continue
-        
-        # get the image caption
-        print(cont,"__________STARTING-IMG \"", image_name ,"\"_________________")
-        print("Human Image Captions ")
-        # print(data.values[0][2])
-        # print(data.values[1][2])
-        # print(data.values[2][2])
-        print(data.values[3][2])
-
-        # get the next image
-        img = cv2.imread(os.path.join(image_path, image_name))
-        
-        [label_list, locations] = draw_prediction(img)
-        
-        # if nothering is detected or only one thing is detected
-        if len(label_list) <= 1:
-            continue
-        
-        # print a sentence for each image
-        print("Robot Image Caption:")
-        # count the repted classes in the image
-        # create a dictionary with the class and the number of times it appears
-        class_count = {}
-        for label in label_list:
-            if label in class_count:
-                class_count[label] += 1
-            else:
-                class_count[label] = 1
-        
-        print(class_count)
-        
-        # create story from each class
-        story = ""
-        
-        # concept_dep = create_concept_dep(label_list, locations)
-        concept_dep = {}
-               
-        story, concept_dep= make_recessive_story(label_list, class_count, locations, story, concept_dep)
-        
-        # print the story
-        print(story)
-        print(concept_dep)
-        say_story(story)
- 
-        # add the story to the dataframe
-        out_df = out_df.append({'image_name': image_name, 
-                                'concept_dep' : concept_dep, 
-                                'robot_caption': story,
-                                'human_caption3': data.values[3][2],
-                                'human_caption2': data.values[2][2],
-                                'human_caption1': data.values[1][2],
-                                'human_caption0': data.values[0][2],
-                                },
-                               ignore_index=True)
-        
-        # break
-        cont += 1
-        print("__________ENDING-IMG \"", image_name ,"\"_________________")
-        # if cont == 10:
-        #     break
+    # open the camera with opencv
+    cap = cv2.VideoCapture(0)
     
-    # create a new csv file with the story
-    out_df.to_csv(csv_out_file, sep='|', index=False)
+    print("Press 'q' to quit")
+    
+    # every 100 seconds, take a picture the current frame and run the model
+    time_count = 0
+    
+    # main loop
+    while True:
+        img = cap.read()[1]
         
+        # check if its time to run the model
+        if time_count % 100 == 0:
+            # run the model
+            [label_list, locations] = draw_prediction(img)
+        
+            # if nothering is detected or only one thing is detected
+            if len(label_list) <= 0:
+                continue
+            
+            # print a sentence for each image
+            print("Robot Image Caption:")
+            # count the repted classes in the image
+            # create a dictionary with the class and the number of times it appears
+            class_count = {}
+            for label in label_list:
+                if label in class_count:
+                    class_count[label] += 1
+                else:
+                    class_count[label] = 1
+            
+            print(class_count)
+            story = ""
+            concept_dep =  {}
+            # create story from each class              
+            story, concept_dep= make_recessive_story(label_list, class_count, locations, story, concept_dep)
+        
+
+            # say the story
+            say_story(story)
+            
+            # print the story
+            print(story)
+            
+            # print the concept depencency representation
+            print(concept_dep)
+            
+        # increment the time count
+        time_count += 1
+        
+        cv2.imshow("Final", img)
+        
+        
+        # exit if the user presses q
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    
         
         
 

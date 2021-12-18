@@ -14,41 +14,41 @@ This image shows you how to downloaded the YOLO model.
 <img src="assets/download_image.png" width=70%>
 
 
-unzip the YOLO_Weights.zip file and place the weights in the same directory as this file. unzip the download into this the YOLO_Weights  folder.
+unzip the YOLO_Weights.zip file and place the weights in the same directory as this file.
 
 
 this is what your directory structure should look something like:
 ```
-C:.
-│   clean_results.csv
-│   coco_file.py
-│   main.py
-│   README.md
-│   requirements.txt
-│   results_out.csv
-│   text_to_speach.py
-│
-├───assets
-│       download_image.png
-│
-├───demo_images
-│       2098418613.jpg
-│       211402278.jpg
-│       2123995873.jpg
-│       2324749825.jpg
-│       2330765551.jpg
-│       2331827016.jpg
-│       2403832405.jpg
-│       2420549526.jpg
-│       2629302765.jpg
-│       284644694.jpg
-│
-├───YOLO_Weights
-│       coco.names
-│       yolov3.cfg
-│       yolov3.weights
-│
-└───
+zenif@system:~/Documents/AI_Image_Caption$ tree
+.
+├── assets
+│   └── download_image.png
+├── coco_file.py
+├── clean_results.csv
+├── demo_images
+│   ├── 2098418613.jpg
+│   ├── 211402278.jpg
+│   ├── 2123995873.jpg
+│   ├── 2324749825.jpg
+│   ├── 2330765551.jpg
+│   ├── 2331827016.jpg
+│   ├── 2403832405.jpg
+│   ├── 2420549526.jpg
+│   ├── 2629302765.jpg
+│   └── 284644694.jpg
+├── main.py
+├── __pycache__
+│   ├── coco_file.cpython-36.pyc
+│   ├── coco_file.cpython-39.pyc
+│   └── coco_lexicon.cpython-39.pyc
+├── README.md
+├── requirements.txt
+├── results_out.csv
+├── text_to_speach.py
+└── YOLO_Weights
+    ├── coco.names
+    ├── yolov3.cfg
+    └── yolov3.weights
 ```
 
 ----------------------------------------------------------------------------------------------------------------------
