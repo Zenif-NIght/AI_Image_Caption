@@ -80,6 +80,13 @@ python3 main.py
 
 note I have a bug where the 1st image does not show up.also if you don't hear the speech turn on your speakers
 
+If you have a webcam, you can run the code by running the following command
+this will take an image from your webcam and then run the program every 5 -10 seconds
+```
+python3 webcam.py
+```
+press 'q' to quit or in the terminal press 'ctrl+c' (a few times)
+
 # Results
 The results are shown in the in the output csv file: results_out.csv. The first column is the image name and the second column is the conceptual dependency representation. the las 2 columns are the robot_caption and human_caption. 
 
