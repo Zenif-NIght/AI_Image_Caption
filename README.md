@@ -37,12 +37,21 @@ zenif@system:~/Documents/testing$ tree
 │   ├── 2629302765.jpg
 │   └── 284644694.jpg
 ├── main.py
+├── __pycache__
+│   └── coco_file.cpython-36.pyc
 ├── README.md
 ├── requirements.txt
 ├── results_out.csv
 ├── speach_code.zip
 ├── text_to_speach.py
-└── webcam.py
+├── webcam.py
+└── YOLO_Weights
+    ├── coco.names
+    ├── yolov3.cfg
+    └── yolov3.weights
+
+4 directories, 24 files
+
 ```
 
 ----------------------------------------------------------------------------------------------------------------------
